@@ -47,22 +47,24 @@ extension TestDelegate: NSTextLayoutManagerDelegate {
 }
 
 struct TestView: NSViewRepresentable {
-    let delegate = TestDelegate()
-    
+    public func makeCoordinator() -> TestDelegate {
+        return TestDelegate()
+    }
+
     public init() { }
 
-    public func createContentStorage() -> NSTextContainer {
+    public func createContentStorage(_ delegate: TestDelegate) -> NSTextContainer {
         // MARK: NSTextContentStorageDelegate
         let textContentStorage = NSTextContentStorage()
-        textContentStorage.delegate = self.delegate
+        textContentStorage.delegate = delegate
 
         // MARK: NSTextLayoutManagerDelegate
         let textLayoutManager = NSTextLayoutManager()
-        textLayoutManager.delegate = self.delegate
+        textLayoutManager.delegate = delegate
         textContentStorage.addTextLayoutManager(textLayoutManager)
         
         // MARK: NSTextStorageDelegate
-        textContentStorage.textStorage?.delegate = self.delegate
+        textContentStorage.textStorage?.delegate = delegate
 
         let textContainer = NSTextContainer()
         textLayoutManager.textContainer = textContainer
@@ -71,7 +73,7 @@ struct TestView: NSViewRepresentable {
     }
 
     public func makeNSView(context: Context) -> NSTextView {
-        let container = self.createContentStorage()
+        let container = self.createContentStorage(context.coordinator)
         let textView = NSTextView(frame: CGRect(), textContainer: container)
         return textView
     }
