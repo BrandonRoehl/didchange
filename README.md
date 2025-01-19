@@ -1,3 +1,5 @@
+https://github.com/BrandonRoehl/didchange/blob/main/didchange/ContentView.swift#L36
+
 While this next line exists none of the following fire
 just looking for an explination as to why? Comment it out to
 fix it. This happens regardless of what ones are enabled and
